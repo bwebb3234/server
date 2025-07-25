@@ -5,10 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Beautiful Basic Web Page</title>
 
-
-
-
-
   <style>
     /* Reset and base styles */
     * {
@@ -104,7 +100,6 @@
 </head>
 <body>
 
-
 <!-- UTune App-->
  <!-- Simple form UI -->
 <input type="text" id="youtubeUrl" placeholder="Enter YouTube URL" style="width: 400px;" />
@@ -128,13 +123,23 @@ async function convertToMp3() {
     });
 
     if (!response.ok) {
-      const err = await response.json();
-      alert('Error: ' + (err.error || 'Conversion failed'));
+      // Try to parse error response as JSON, fallback to generic error
+      let errorMsg = 'Conversion failed';
+      try {
+        const errData = await response.json();
+        errorMsg = errData.error || errorMsg;
+      } catch (e) {
+        // Not JSON response, keep generic error
+      }
+      alert('Error: ' + errorMsg);
       return;
     }
 
+    // Response is OK and expected to be binary MP3
     const blob = await response.blob();
-    const filename = response.headers.get('Content-Disposition')?.match(/filename="(.+)"/)?.[1] || 'video.mp3';
+    const contentDisposition = response.headers.get('Content-Disposition');
+    const filenameMatch = contentDisposition && contentDisposition.match(/filename="?(.+)"?/);
+    const filename = filenameMatch ? filenameMatch[1] : 'video.mp3';
 
     const downloadUrl = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -150,11 +155,6 @@ async function convertToMp3() {
 }
 </script>
 <!-- end of UTune App-->
-
-
-
-
-
 
   <header>
     <h1>My Beautiful Web Page</h1>
