@@ -1,7 +1,7 @@
 from flask import Flask, request, send_file
 from flask_cors import CORS
 from pytube import YouTube
-from moviepy.editor import VideoFileClip
+from moviepy.editor import AudioFileClip
 import os
 import tempfile
 
@@ -24,14 +24,14 @@ def convert():
 
         # Use temporary directory to avoid naming conflicts and for cleanup
         with tempfile.TemporaryDirectory() as tmpdirname:
-            video_path = audio_stream.download(output_path=tmpdirname, filename='temp_audio')
+            # Download audio stream with a proper extension
+            audio_path = audio_stream.download(output_path=tmpdirname, filename='temp_audio.mp4')
             mp3_path = os.path.join(tmpdirname, 'converted_audio.mp3')
 
-            video_clip = VideoFileClip(video_path)
-            audio_clip = video_clip.audio
+            # Use AudioFileClip to load the audio file, then write out mp3
+            audio_clip = AudioFileClip(audio_path)
             audio_clip.write_audiofile(mp3_path)
             audio_clip.close()
-            video_clip.close()
 
             # Send MP3 file with proper name and mimetype
             return send_file(
@@ -40,7 +40,6 @@ def convert():
                 download_name=f"{yt.title}.mp3",
                 mimetype="audio/mpeg"
             )
-
     except Exception as e:
         return {"error": str(e)}, 500
 
