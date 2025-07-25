@@ -100,61 +100,6 @@
 </head>
 <body>
 
-<!-- UTune App-->
- <!-- Simple form UI -->
-<input type="text" id="youtubeUrl" placeholder="Enter YouTube URL" style="width: 400px;" />
-<button onclick="convertToMp3()">Convert to MP3</button>
-
-<script>
-async function convertToMp3() {
-  const url = document.getElementById('youtubeUrl').value.trim();
-  if (!url) {
-    alert('Please enter a YouTube URL');
-    return;
-  }
-
-  const formData = new FormData();
-  formData.append('url', url);
-
-  try {
-    const response = await fetch('/mp3convert/convert', {  // relative path served via Nginx reverse proxy
-      method: 'POST',
-      body: formData
-    });
-
-    if (!response.ok) {
-      // Try to parse error response as JSON, fallback to generic error
-      let errorMsg = 'Conversion failed';
-      try {
-        const errData = await response.json();
-        errorMsg = errData.error || errorMsg;
-      } catch (e) {
-        // Not JSON response, keep generic error
-      }
-      alert('Error: ' + errorMsg);
-      return;
-    }
-
-    // Response is OK and expected to be binary MP3
-    const blob = await response.blob();
-    const contentDisposition = response.headers.get('Content-Disposition');
-    const filenameMatch = contentDisposition && contentDisposition.match(/filename="?(.+)"?/);
-    const filename = filenameMatch ? filenameMatch[1] : 'video.mp3';
-
-    const downloadUrl = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = downloadUrl;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    URL.revokeObjectURL(downloadUrl);
-  } catch (error) {
-    alert('Unexpected error: ' + error.message);
-  }
-}
-</script>
-<!-- end of UTune App-->
 
   <header>
     <h1>My Beautiful Web Page</h1>
