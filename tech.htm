@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Beautiful Basic Web Page</title>
+
+
+
+
+
+  <style>
+    /* Reset and base styles */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f0f4f8;
+      color: #333;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+    }
+    header {
+      background: #007acc;
+      color: white;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 {
+      font-weight: 700;
+      font-size: 1.6rem;
+    }
+    nav ul {
+      display: flex;
+      list-style: none;
+    }
+    nav ul li {
+      margin-left: 1.5rem;
+    }
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 600;
+      padding: 0.25rem 0.5rem;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+    nav ul li a:hover,
+    nav ul li a:focus {
+      background: #005a9e;
+      outline: none;
+    }
+
+    main {
+      flex: 1;
+      padding: 2rem;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+    h2 {
+      color: #007acc;
+      margin-bottom: 1rem;
+    }
+    p {
+      margin-bottom: 1rem;
+      font-size: 1.1rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      background: #e2e8f0;
+      font-size: 0.9rem;
+      color: #666;
+    }
+
+    /* Responsive styling */
+    @media (max-width: 600px) {
+      header {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      nav ul {
+        flex-direction: column;
+        width: 100%;
+        margin-top: 0.5rem;
+      }
+      nav ul li {
+        margin-left: 0;
+        margin-bottom: 0.5rem;
+      }
+      main {
+        padding: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+
+<!-- UTune App-->
+ <!-- Simple form UI -->
+<input type="text" id="youtubeUrl" placeholder="Enter YouTube URL" style="width: 400px;" />
+<button onclick="convertToMp3()">Convert to MP3</button>
+
+<script>
+async function convertToMp3() {
+  const url = document.getElementById('youtubeUrl').value.trim();
+  if (!url) {
+    alert('Please enter a YouTube URL');
+    return;
+  }
+
+  const formData = new FormData();
+  formData.append('url', url);
+
+  try {
+    const response = await fetch('/mp3convert/convert', {  // relative path served via Nginx reverse proxy
+      method: 'POST',
+      body: formData
+    });
+
+    if (!response.ok) {
+      const err = await response.json();
+      alert('Error: ' + (err.error || 'Conversion failed'));
+      return;
+    }
+
+    const blob = await response.blob();
+    const filename = response.headers.get('Content-Disposition')?.match(/filename="(.+)"/)?.[1] || 'video.mp3';
+
+    const downloadUrl = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = downloadUrl;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(downloadUrl);
+  } catch (error) {
+    alert('Unexpected error: ' + error.message);
+  }
+}
+</script>
+<!-- end of UTune App-->
+
+
+
+
+
+
+  <header>
+    <h1>My Beautiful Web Page</h1>
+    <nav aria-label="Primary">
+      <ul>
+        <li><a href="http://www.webylabz.space" tabindex="0">Home</a></li>
+        <li><a href="#about" tabindex="0">About</a></li>
+        <li><a href="#services" tabindex="0">Services</a></li>
+        <li><a href="#contact" tabindex="0">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+  <main>
+    <section id="home">
+      <h2>Welcome to My Website</h2>
+      <p>This is a simple, elegant webpage designed for clarity and responsiveness. Resize your browser or open on a mobile device to see it adapt seamlessly.</p>
+    </section>
+    <section id="about">
+      <h2>About Us</h2>
+      <p>We focus on creating intuitive designs that work beautifully on all screen sizes. Our passion is crafting smooth user experiences with clean UI elements.</p>
+    </section>
+    <section id="services">
+      <h2>Our Services</h2>
+      <p>From web development to UI design, we offer a variety of services tailored to your needs. Reach out to learn more about how we can help you build your digital presence.</p>
+    </section>
+    <section id="contact">
+      <h2>Contact</h2>
+      <p>If you’d like to get in touch, please email us at <a href="mailto:info@example.com">info@example.com</a>.</p>
+    </section>
+  </main>
+  <footer>
+    &copy; 2025 My Beautiful Web Page. All rights reserved.
+  </footer>
+</body>
+</html>
