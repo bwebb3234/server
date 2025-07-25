@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Elegant Simplicity with Sidebar</title>
+  <style>
+    /* Reset and base */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body, html {
+      height: 100%;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fefefe;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    /* Layout grid: sidebar + main content */
+    .app-container {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      height: 100vh;
+      width: 100vw;
+    }
+
+    /* Sidebar styles */
+    .sidebar {
+      background: rgba(255 255 255 / 0.1);
+      backdrop-filter: blur(12px);
+      box-shadow: 3px 0 10px rgba(0,0,0,0.25);
+      display: flex;
+      flex-direction: column;
+      padding: 2rem 1.5rem;
+      border-radius: 0 1.5rem 1.5rem 0;
+      position: relative; /* For close button */
+      transition: transform 0.3s ease;
+    }
+    .sidebar h2 {
+      margin-bottom: 1.5rem;
+      font-weight: 800;
+      font-size: 1.5rem;
+      letter-spacing: 0.05em;
+      text-shadow: 0 0 10px rgba(255,255,255,0.3);
+      user-select: text;
+    }
+    .menu-link {
+      color: #e0d7f5;
+      text-decoration: none;
+      padding: 0.75rem 1rem;
+      margin-bottom: 1rem;
+      border-radius: 1rem;
+      font-weight: 600;
+      font-size: 1.1rem;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      box-shadow: 0 0 8px rgba(255 255 255 / 0.15);
+      user-select: none;
+      word-break: break-word;
+    }
+    .menu-link:hover,
+    .menu-link:focus {
+      background-color: #764ba2;
+      color: #fff;
+      outline: none;
+      box-shadow: 0 0 15px rgba(255 255 255 / 0.7);
+    }
+
+    /* Main content container */
+    .container {
+      background: rgba(255 255 255 / 0.1);
+      border-radius: 1.5rem;
+      padding: 3rem 4rem;
+      backdrop-filter: blur(12px);
+      box-shadow: 0 0 20px rgba(0,0,0,0.2);
+      text-align: center;
+      max-width: 400px;
+      margin: auto;
+      animation: fadeInUp 1.3s ease forwards;
+      overflow-wrap: break-word;
+    }
+    h1 {
+      font-weight: 800;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      letter-spacing: 0.05em;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      user-select: text;
+    }
+    p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 2.5rem;
+      color: #e0d7f5;
+      user-select: text;
+    }
+    button {
+      background: #fff;
+      color: #764ba2;
+      border: none;
+      padding: 0.8rem 2rem;
+      border-radius: 2rem;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      box-shadow: 0 8px 15px rgba(118, 75, 162, 0.3);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+      user-select: none;
+    }
+    button:hover {
+      transform: scale(1.1);
+      box-shadow: 0 12px 25px rgba(118, 75, 162, 0.6);
+    }
+    button:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.6);
+    }
+    #btnDesc {
+      margin-top: 1rem;
+      font-style: italic;
+      opacity: 0.8;
+      user-select: text;
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      0% {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Hamburger button - hidden on desktop */
+    .hamburger {
+      display: none;
+      position: fixed;
+      top: 1rem;
+      left: 1rem;
+      width: 2.5rem;
+      height: 2rem;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      z-index: 1001;
+    }
+    .hamburger span {
+      display: block;
+      height: 3px;
+      background: #fff;
+      border-radius: 2px;
+    }
+    .hamburger:focus {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+    }
+
+    /* Close button inside sidebar (mobile) */
+    .close-sidebar {
+      display: none;
+      position: absolute;
+      top: 0.75rem;
+      right: 1rem;
+      font-size: 2rem;
+      color: #fff;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      user-select: none;
+    }
+    .close-sidebar:focus {
+      outline: 2px solid #fff;
+      outline-offset: 2px;
+    }
+
+    /* Responsive tweaks for smaller widths */
+    @media (max-width: 600px) {
+      body, html {
+        overflow: auto;
+      }
+
+      .app-container {
+        grid-template-columns: 1fr;
+        padding: 0;
+        height: auto;
+        width: 100vw;
+      }
+
+      /* Show hamburger */
+      .hamburger {
+        display: flex;
+      }
+
+      /* Sidebar transforms to overlay drawer */
+      .sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 260px;
+        border-radius: 0 0 0 1.5rem;
+        flex-direction: column;
+        padding: 2rem 1.5rem 3rem 1.5rem;
+        z-index: 1000;
+        box-shadow: 3px 0 15px rgba(0,0,0,0.35);
+        transform: translateX(-110%);
+        transition: transform 0.3s ease;
+        background: rgba(255 255 255 / 0.15);
+        backdrop-filter: blur(14px);
+        user-select: none;
+      }
+
+      /* Sidebar visible when toggled */
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .sidebar h2 {
+        display: block;
+        font-size: 1.75rem;
+        margin-bottom: 2rem;
+        user-select: text;
+      }
+
+      .menu-link {
+        margin-bottom: 1rem;
+        padding: 1rem 1.25rem;
+        font-size: 1.2rem;
+        border-radius: 1.25rem;
+        box-shadow: 0 0 12px rgba(255 255 255 / 0.2);
+        word-break: break-word;
+      }
+
+      .menu-link:hover,
+      .menu-link:focus {
+        background-color: #764ba2;
+        color: #fff;
+        outline: none;
+        box-shadow: 0 0 20px rgba(255 255 255 / 0.8);
+      }
+
+      /* Close button visible inside sidebar */
+      .close-sidebar {
+        display: block;
+      }
+
+      .container {
+        max-width: none;
+        width: 100%;
+        padding: 2.5rem 2rem;
+        border-radius: 1rem;
+        margin: 100px auto 2rem auto; /* margin top for hamburger space */
+      }
+    }
+  </style>
+</head>
+<body>
+  <button 
+    class="hamburger" 
+    aria-label="Open menu" 
+    aria-controls="sidebar" 
+    aria-expanded="false"
+    id="hamburgerBtn"
+  >
+    <span></span>
+    <span></span>
+    <span></span>
+  </button>
+
+  <div class="app-container" role="application">
+    <nav 
+      class="sidebar" 
+      id="sidebar" 
+      aria-label="Primary navigation menu"
+    >
+      <button class="close-sidebar" aria-label="Close menu" id="closeSidebarBtn">&times;</button>
+      <h2>Menu</h2>
+      <a href="https://example.com/page1" class="menu-link" target="_blank" rel="noopener noreferrer">Comedy</a>
+      <a href="https://example.com/page2" class="menu-link" target="_blank" rel="noopener noreferrer">Art</a>
+      <a href="https://example.com/page3" class="menu-link" target="_blank" rel="noopener noreferrer">Technology</a>
+      <a href="https://example.com/page4" class="menu-link" target="_blank" rel="noopener noreferrer">Autobiography</a>
+    </nav>
+
+    <main class="container" role="main" aria-label="Elegant webpage content">
+      <h1>Elegant Simplicity</h1>
+      <p>Embrace minimalism with subtle grace — a moment of calm in a chaotic world.</p>
+      <button id="magicBtn" aria-describedby="btnDesc">Click me</button>
+      <p id="btnDesc"></p>
+    </main>
+  </div>
+
+  <script>
+    const btn = document.getElementById('magicBtn');
+    const desc = document.getElementById('btnDesc');
+
+    btn.addEventListener('click', () => {
+      const quotes = [
+        "“Simplicity is the ultimate sophistication.” – Leonardo da Vinci",
+        "“Less is more.” – Ludwig Mies van der Rohe",
+        "“Perfection is achieved not when there is nothing more to add, but when there is nothing left to take away.” – Antoine de Saint-Exupéry",
+        "“Design is not just what it looks like and feels like. Design is how it works.” – Steve Jobs"
+      ];
+      let current = desc.dataset.index ? parseInt(desc.dataset.index) : -1;
+      current = (current + 1) % quotes.length;
+      desc.textContent = quotes[current];
+      desc.dataset.index = current;
+    });
+
+    // Sidebar toggle for mobile
+    const sidebar = document.getElementById('sidebar');
+    const hamburger = document.getElementById('hamburgerBtn');
+    const closeBtn = document.getElementById('closeSidebarBtn');
+
+    function openSidebar() {
+      sidebar.classList.add('open');
+      hamburger.setAttribute('aria-expanded', 'true');
+      // prevent background scroll when sidebar open
+      document.body.style.overflow = 'hidden';
+    }
+    function closeSidebar() {
+      sidebar.classList.remove('open');
+      hamburger.setAttribute('aria-expanded', 'false');
+      document.body.style.overflow = '';
+    }
+
+    hamburger.addEventListener('click', () => {
+      if (sidebar.classList.contains('open')) {
+        closeSidebar();
+      } else {
+        openSidebar();
+      }
+    });
+
+    closeBtn.addEventListener('click', closeSidebar);
+
+    // Close sidebar if click outside sidebar on mobile
+    document.addEventListener('click', (e) => {
+      if (window.innerWidth <= 600) {
+        if (
+          sidebar.classList.contains('open') &&
+          !sidebar.contains(e.target) &&
+          e.target !== hamburger
+        ) {
+          closeSidebar();
+        }
+      }
+    });
+
+    // Close sidebar on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && sidebar.classList.contains('open')) {
+        closeSidebar();
+        hamburger.focus();
+      }
+    });
+  </script>
+</body>
+</html>
