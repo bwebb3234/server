@@ -8,7 +8,7 @@ import tempfile
 app = Flask(__name__)
 
 # Replace with your actual domain to restrict CORS (or use "*" carefully)
-CORS(app, origins=["https://www.your-website.com"])
+CORS(app, origins=["https://www.webylabz.space"])
 
 @app.route('/convert', methods=['POST'])
 def convert():
