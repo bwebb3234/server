@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Basic Pong Game in JS</title>
+  <style>
+    body {
+      background: black;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+    canvas {
+      border: 2px solid white;
+      background: black;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="pong" width="800" height="600"></canvas>
+
+<script>
+  const canvas = document.getElementById('pong');
+  const ctx = canvas.getContext('2d');
+
+  // Paddle properties
+  const paddleWidth = 10, paddleHeight = 100, paddleSpeed = 6;
+  let leftPaddleY = canvas.height / 2 - paddleHeight / 2;
+  let rightPaddleY = canvas.height / 2 - paddleHeight / 2;
+
+  // Ball properties
+  const ballRadius = 10;
+  let ballX = canvas.width / 2;
+  let ballY = canvas.height / 2;
+  let ballSpeedX = 5;
+  let ballSpeedY = 5;
+
+  let leftPaddleUp = false;
+  let leftPaddleDown = false;
+  let rightPaddleUp = false;
+  let rightPaddleDown = false;
+
+  // Event listeners for key press
+  window.addEventListener('keydown', function(e) {
+    switch(e.key) {
+      case 'w': leftPaddleUp = true; break;
+      case 's': leftPaddleDown = true; break;
+      case 'ArrowUp': rightPaddleUp = true; break;
+      case 'ArrowDown': rightPaddleDown = true; break;
+    }
+  });
+
+  window.addEventListener('keyup', function(e) {
+    switch(e.key) {
+      case 'w': leftPaddleUp = false; break;
+      case 's': leftPaddleDown = false; break;
+      case 'ArrowUp': rightPaddleUp = false; break;
+      case 'ArrowDown': rightPaddleDown = false; break;
+    }
+  });
+
+  function drawRect(x, y, w, h, color) {
+    ctx.fillStyle = color;
+    ctx.fillRect(x, y, w, h);
+  }
+
+  function drawCircle(x, y, r, color) {
+    ctx.fillStyle = color;
+    ctx.beginPath();
+    ctx.arc(x, y, r, 0, Math.PI * 2);
+    ctx.closePath();
+    ctx.fill();
+  }
+
+  function resetBall() {
+    ballX = canvas.width / 2;
+    ballY = canvas.height / 2;
+    ballSpeedX = -ballSpeedX;
+    ballSpeedY = 5 * (Math.random() > 0.5 ? 1 : -1);
+  }
+
+  function update() {
+    // Move paddles
+    if (leftPaddleUp) leftPaddleY = Math.max(leftPaddleY - paddleSpeed, 0);
+    if (leftPaddleDown) leftPaddleY = Math.min(leftPaddleY + paddleSpeed, canvas.height - paddleHeight);
+    if (rightPaddleUp) rightPaddleY = Math.max(rightPaddleY - paddleSpeed, 0);
+    if (rightPaddleDown) rightPaddleY = Math.min(rightPaddleY + paddleSpeed, canvas.height - paddleHeight);
+
+    // Move ball
+    ballX += ballSpeedX;
+    ballY += ballSpeedY;
+
+    // Ball collision with top/bottom walls
+    if (ballY + ballRadius > canvas.height || ballY - ballRadius < 0) {
+      ballSpeedY = -ballSpeedY;
+    }
+
+    // Ball collision with paddles
+    // Left paddle collision
+    if (ballX - ballRadius < paddleWidth + 10 &&
+        ballY > leftPaddleY &&
+        ballY < leftPaddleY + paddleHeight) {
+      ballSpeedX = -ballSpeedX;
+    }
+
+    // Right paddle collision
+    if (ballX + ballRadius > canvas.width - paddleWidth - 10 &&
+        ballY > rightPaddleY &&
+        ballY < rightPaddleY + paddleHeight) {
+      ballSpeedX = -ballSpeedX;
+    }
+
+    // Check for scoring
+    if (ballX - ballRadius < 0 || ballX + ballRadius > canvas.width) {
+      resetBall();
+    }
+  }
+
+  function draw() {
+    // Clear screen
+    drawRect(0, 0, canvas.width, canvas.height, 'black');
+
+    // Draw paddles
+    drawRect(10, leftPaddleY, paddleWidth, paddleHeight, 'white');
+    drawRect(canvas.width - paddleWidth - 10, rightPaddleY, paddleWidth, paddleHeight, 'white');
+
+    // Draw ball
+    drawCircle(ballX, ballY, ballRadius, 'white');
+  }
+
+  function gameLoop() {
+    update();
+    draw();
+    requestAnimationFrame(gameLoop);
+  }
+
+  gameLoop();
+</script>
+
+</body>
+</html>
