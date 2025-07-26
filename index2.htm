@@ -20,6 +20,7 @@
       user-select: none;
     }
 
+
     /* Layout grid: sidebar + main content */
     .app-container {
       display: grid;
@@ -27,6 +28,7 @@
       height: 100vh;
       width: 100vw;
     }
+
 
     /* Sidebar styles */
     .sidebar {
@@ -68,6 +70,7 @@
       outline: none;
       box-shadow: 0 0 15px rgba(255 255 255 / 0.7);
     }
+
 
     /* Main content container */
     .container {
@@ -125,6 +128,7 @@
       user-select: text;
     }
 
+
     /* Animations */
     @keyframes fadeInUp {
       0% {
@@ -136,6 +140,7 @@
         transform: translateY(0);
       }
     }
+
 
     /* Hamburger button - hidden on desktop */
     .hamburger {
@@ -161,6 +166,7 @@
       outline-offset: 2px;
     }
 
+
     /* Close button inside sidebar (mobile) */
     .close-sidebar {
       display: none;
@@ -179,11 +185,13 @@
       outline-offset: 2px;
     }
 
+
     /* Responsive tweaks for smaller widths */
     @media (max-width: 600px) {
       body, html {
         overflow: auto;
       }
+
 
       .app-container {
         grid-template-columns: 1fr;
@@ -192,10 +200,12 @@
         width: 100vw;
       }
 
+
       /* Show hamburger */
       .hamburger {
         display: flex;
       }
+
 
       /* Sidebar transforms to overlay drawer */
       .sidebar {
@@ -216,10 +226,12 @@
         user-select: none;
       }
 
+
       /* Sidebar visible when toggled */
       .sidebar.open {
         transform: translateX(0);
       }
+
 
       .sidebar h2 {
         display: block;
@@ -227,6 +239,7 @@
         margin-bottom: 2rem;
         user-select: text;
       }
+
 
       .menu-link {
         margin-bottom: 1rem;
@@ -237,6 +250,7 @@
         word-break: break-word;
       }
 
+
       .menu-link:hover,
       .menu-link:focus {
         background-color: #764ba2;
@@ -245,10 +259,12 @@
         box-shadow: 0 0 20px rgba(255 255 255 / 0.8);
       }
 
+
       /* Close button visible inside sidebar */
       .close-sidebar {
         display: block;
       }
+
 
       .container {
         max-width: none;
@@ -273,6 +289,7 @@
     <span></span>
   </button>
 
+
   <div class="app-container" role="application">
     <nav 
       class="sidebar" 
@@ -281,12 +298,13 @@
     >
       <button class="close-sidebar" aria-label="Close menu" id="closeSidebarBtn">&times;</button>
       <h2>Menu</h2>
-      <a href="https://webylabz.space" class="menu-link" target="_blank" rel="noopener noreferrer">Comedy</a>
-      <a href="https://webylabz.space" class="menu-link" target="_blank" rel="noopener noreferrer">Art</a>
-      <a href="tech.htm" class="menu-link" target="_blank" rel="noopener noreferrer">Technology</a>
-      <a href="https://webylabz.space" class="menu-link" target="_blank" rel="noopener noreferrer">Autobiography</a>
-      <a href="https://webylabz.space" class="menu-link" target="_blank" rel="noopener noreferrer">Psychic</a>
+      <a href="https://webylabz.space" class="menu-link">Comedy</a>
+      <a href="https://webylabz.space" class="menu-link">Art</a>
+      <a href="tech.htm" class="menu-link">Technology</a>
+      <a href="https://webylabz.space" class="menu-link">Autobiography</a>
+      <a href="https://webylabz.space" class="menu-link">Psychic</a>
     </nav>
+
 
     <main class="container" role="main" aria-label="Elegant webpage content">
       <h1>Elegant Simplicity</h1>
@@ -296,9 +314,11 @@
     </main>
   </div>
 
+
   <script>
     const btn = document.getElementById('magicBtn');
     const desc = document.getElementById('btnDesc');
+
 
     btn.addEventListener('click', () => {
       const quotes = [
@@ -313,10 +333,12 @@
       desc.dataset.index = current;
     });
 
+
     // Sidebar toggle for mobile
     const sidebar = document.getElementById('sidebar');
     const hamburger = document.getElementById('hamburgerBtn');
     const closeBtn = document.getElementById('closeSidebarBtn');
+
 
     function openSidebar() {
       sidebar.classList.add('open');
@@ -330,6 +352,7 @@
       document.body.style.overflow = '';
     }
 
+
     hamburger.addEventListener('click', () => {
       if (sidebar.classList.contains('open')) {
         closeSidebar();
@@ -338,7 +361,9 @@
       }
     });
 
+
     closeBtn.addEventListener('click', closeSidebar);
+
 
     // Close sidebar if click outside sidebar on mobile
     document.addEventListener('click', (e) => {
@@ -352,6 +377,7 @@
         }
       }
     });
+
 
     // Close sidebar on escape key
     document.addEventListener('keydown', (e) => {
