@@ -5,6 +5,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Beautiful Basic Web Page</title>
 
+  <!-- space shooter styles-->
+    <style>
+    /* Keeps the canvas centered and with black background */
+    #spaceShooter {
+      background: black;
+      display: block;
+      margin: 0 auto;
+    }
+  </style>
+
   <style>
     /* Reset and base styles */
     * {
@@ -100,15 +110,20 @@
 </head>
 <body>
 
-   <!-- pong javascript -->
-   <iframe src="pong.htm" width="800" height="600" frameborder="0" style="display:block; margin:auto;"></iframe>
+  <div id="gameContainer" style="display: flex; justify-content: center; align-items: flex-start; gap: 20px;">
+  <!-- space shooter -->
+  <canvas id="spaceShooter" width="800" height="400" style="border:1px solid #000;"></canvas>
+</div>
+
+<!-- Link to external JavaScript -->
+<script src="spaceShooter.js"></script>
 
 
   <header>
     <h1>My Beautiful Web Page</h1>
     <nav aria-label="Primary">
       <ul>
-        <li><a href="http://www.webylabz.space" tabindex="0">Home</a></li>
+        <li><a href="https://www.webylabz.space" tabindex="0">Home</a></li>
         <li><a href="#about" tabindex="0">About</a></li>
         <li><a href="#services" tabindex="0">Services</a></li>
         <li><a href="#contact" tabindex="0">Contact</a></li>
