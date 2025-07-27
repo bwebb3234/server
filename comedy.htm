@@ -52,23 +52,29 @@
       letter-spacing: 0.5px;
     }
 
-    /* File info */
-    .file-info {
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 12px;
-      padding: 20px;
+    /* File selector */
+    .file-selector {
       margin-bottom: 40px;
-      box-shadow: inset 0 4px 8px rgba(255, 255, 255, 0.2);
     }
-    .file-name {
-      font-size: 1.25rem;
+    .file-selector select {
+      width: 100%;
+      padding: 14px 20px;
+      border-radius: 12px;
+      border: none;
+      font-size: 1.1rem;
       font-weight: 600;
-      margin: 0 0 8px 0;
-      overflow-wrap: break-word;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      cursor: pointer;
+      box-shadow: inset 0 4px 8px rgba(255,255,255,0.2);
+      text-shadow: 0 0 6px rgba(0,0,0,0.3);
     }
-    .file-size {
-      font-size: 0.9rem;
-      opacity: 0.7;
+    .file-selector select:focus {
+      outline: 2px solid #ff4b2b;
+      outline-offset: 2px;
     }
 
     /* Buttons wrapper for side-by-side layout */
@@ -142,11 +148,16 @@
 
   <main class="download-container" role="main" aria-label="File download section">
     <h1 class="download-title">Your File is Ready</h1>
-    <p class="download-subtitle">Click the button below to download your file safely and securely.</p>
+    <p class="download-subtitle">Select the file and click the button below to download your file safely and securely.</p>
 
-    <section class="file-info" aria-label="File information">
-      <p class="file-name" aria-live="polite" aria-atomic="true" id="fileName">Beautiful_Web_Resume.pdf</p>
-      <p class="file-size" id="fileSize">2.3 MB</p>
+    <section class="file-selector" aria-label="Select file to download">
+      <select id="fileSelect" aria-describedby="fileSelectDesc">
+        <option value="files/Beautiful_Web_Resume.pdf" selected>Beautiful_Web_Resume.pdf</option>
+        <option value="files/Project_Proposal.docx">Project_Proposal.docx</option>
+        <option value="files/Company_Brochure.pdf">Company_Brochure.pdf</option>
+        <option value="files/Sample_Code.zip">Sample_Code.zip</option>
+      </select>
+      <span id="fileSelectDesc" class="sr-only">Choose a file from the dropdown list</span>
     </section>
 
     <div class="buttons-wrapper">
@@ -155,8 +166,8 @@
         download 
         class="download-button" 
         id="downloadBtn"
-        aria-describedby="fileName fileSize"
         role="button"
+        aria-label="Download selected file"
       >
         Download Now
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -180,6 +191,16 @@
 
     <p class="footer-note">Thank you for choosing our service.</p>
   </main>
+
+  <script>
+    const fileSelect = document.getElementById('fileSelect');
+    const downloadBtn = document.getElementById('downloadBtn');
+
+    fileSelect.addEventListener('change', () => {
+      const selectedFile = fileSelect.value;
+      downloadBtn.href = selectedFile;
+    });
+  </script>
 
 </body>
 </html>
