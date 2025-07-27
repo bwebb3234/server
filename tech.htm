@@ -6,7 +6,7 @@
   <title>Beautiful Basic Web Page</title>
 
   <!-- space shooter styles-->
-    <style>
+  <style>
     /* Keeps the canvas centered and with black background */
     #spaceShooter {
       background: black;
@@ -78,7 +78,6 @@
       margin-bottom: 1rem;
       font-size: 1.1rem;
     }
-
     footer {
       text-align: center;
       padding: 1rem;
@@ -106,18 +105,44 @@
         padding: 1rem;
       }
     }
+
+    /* Styles for the download menu */
+    #downloadMenu {
+      margin-top: 1rem;
+      font-size: 1rem;
+      padding: 0.4rem 0.6rem;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    #downloadButton {
+      margin-left: 0.5rem;
+      background-color: #007acc;
+      color: white;
+      border: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: background-color 0.3s ease;
+    }
+
+    #downloadButton:hover,
+    #downloadButton:focus {
+      background-color: #005a9e;
+      outline: none;
+    }
   </style>
 </head>
 <body>
 
   <div id="gameContainer" style="display: flex; justify-content: center; align-items: flex-start; gap: 20px;">
-  <!-- space shooter -->
-  <canvas id="spaceShooter" width="800" height="400" style="border:1px solid #000;"></canvas>
-</div>
+    <!-- space shooter -->
+    <canvas id="spaceShooter" width="800" height="400" style="border:1px solid #000;"></canvas>
+  </div>
 
-<!-- Link to external JavaScript -->
-<script src="spaceShooter.js"></script>
-
+  <!-- Link to external JavaScript -->
+  <script src="spaceShooter.js"></script>
 
   <header>
     <h1>My Beautiful Web Page</h1>
@@ -134,6 +159,17 @@
     <section id="home">
       <h2>Welcome to My Website</h2>
       <p>This is a simple, elegant webpage designed for clarity and responsiveness. Resize your browser or open on a mobile device to see it adapt seamlessly.</p>
+
+      <!-- Added download menu -->
+      <label for="downloadMenu">Select a file to download:</label>
+      <select id="downloadMenu" aria-label="Select a file to download">
+        <option value="" disabled selected>Choose a file</option>
+        <option value="my-sniffer.py">File sniffer app</option>
+       <!-- <option value="files/file2.zip">File 2 (ZIP)</option>
+        <option value="files/file3.jpg">File 3 (Image)</option>
+        <option value="files/file4.txt">File 4 (Text)</option> -->
+      </select>
+      <button id="downloadButton" disabled>Download</button>
     </section>
     <section id="about">
       <h2>About Us</h2>
@@ -151,5 +187,28 @@
   <footer>
     &copy; 2025 My Beautiful Web Page. All rights reserved.
   </footer>
+
+  <script>
+    const downloadMenu = document.getElementById('downloadMenu');
+    const downloadButton = document.getElementById('downloadButton');
+
+    // Enable the download button only when a file is selected
+    downloadMenu.addEventListener('change', () => {
+      downloadButton.disabled = !downloadMenu.value;
+    });
+
+    // Download the selected file on button click
+    downloadButton.addEventListener('click', () => {
+      if (!downloadMenu.value) return;
+
+      const link = document.createElement('a');
+      link.href = downloadMenu.value;
+      // Set the download attribute to suggest the file name
+      link.download = downloadMenu.value.split('/').pop();
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    });
+  </script>
 </body>
 </html>
