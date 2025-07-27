@@ -55,10 +55,12 @@
     /* File selector */
     .file-selector {
       margin-bottom: 40px;
+      position: relative;
+      /* For the arrow */
     }
     .file-selector select {
       width: 100%;
-      padding: 14px 20px;
+      padding: 14px 50px 14px 20px; /* Right padding to fit arrow */
       border-radius: 12px;
       border: none;
       font-size: 1.1rem;
@@ -71,10 +73,19 @@
       cursor: pointer;
       box-shadow: inset 0 4px 8px rgba(255,255,255,0.2);
       text-shadow: 0 0 6px rgba(0,0,0,0.3);
+
+      /* Add custom arrow using background SVG */
+      background-image: url('data:image/svg+xml;utf8,<svg fill="white" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+      background-repeat: no-repeat;
+      background-position: right 20px center;
+      background-size: 24px 24px;
+      transition: background-position 0.3s ease;
     }
     .file-selector select:focus {
       outline: 2px solid #ff4b2b;
       outline-offset: 2px;
+      /* Slightly move arrow */
+      background-position: right 18px center;
     }
 
     /* Buttons wrapper for side-by-side layout */
@@ -142,6 +153,18 @@
       letter-spacing: 0.6px;
       font-style: italic;
     }
+
+    /* Screen reader only class */
+    .sr-only {
+      position: absolute !important;
+      width: 1px !important;
+      height: 1px !important;
+      padding: 0 !important;
+      margin: -1px !important;
+      overflow: hidden !important;
+      clip: rect(0,0,0,0) !important;
+      border: 0 !important;
+    }
   </style>
 </head>
 <body>
@@ -151,7 +174,7 @@
     <p class="download-subtitle">Select the file and click the button below to download your file safely and securely.</p>
 
     <section class="file-selector" aria-label="Select file to download">
-      <select id="fileSelect" aria-describedby="fileSelectDesc">
+      <select id="fileSelect" aria-describedby="fileSelectDesc" size="4">
         <option value="files/Beautiful_Web_Resume.pdf" selected>Beautiful_Web_Resume.pdf</option>
         <option value="files/Project_Proposal.docx">Project_Proposal.docx</option>
         <option value="files/Company_Brochure.pdf">Company_Brochure.pdf</option>
@@ -197,8 +220,14 @@
     const downloadBtn = document.getElementById('downloadBtn');
 
     fileSelect.addEventListener('change', () => {
-      const selectedFile = fileSelect.value;
-      downloadBtn.href = selectedFile;
+      // For size>1 select, changed option is indicated by selectedOptions
+      let selectedValue;
+      if (fileSelect.size > 1) {
+        selectedValue = fileSelect.selectedOptions[0].value;
+      } else {
+        selectedValue = fileSelect.value;
+      }
+      downloadBtn.href = selectedValue;
     });
   </script>
 
