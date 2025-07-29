@@ -72,9 +72,31 @@
       text-align: center;
     }
   }
+
+  /* Home link styling */
+  .home-link {
+    position: fixed;    /* Fixed position relative to viewport */
+    top: 20px;          /* Distance from the top */
+    left: 20px;         /* Distance from the left */
+    font-weight: 600;
+    text-decoration: none;
+    color: #0066cc;
+    background: #eef6ff;
+    padding: 8px 12px;
+    border-radius: 6px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    transition: background-color 0.3s ease;
+    z-index: 1000; /* Make sure it stays on top */
+  }
+  .home-link:hover {
+    background-color: #cce4ff;
+  }
 </style>
 </head>
 <body>
+
+<!-- Home link in upper left corner -->
+<a href="index.html" class="home-link">Home</a>
 
 <h1>Available Downloads</h1>
 
@@ -82,7 +104,7 @@
   <li class="file-item">
     <div class="file-info">
       <p class="file-name">Driver</p>
-      <p class="file-description">This is a simple driving simulator to show case my ability to code player/camera controlls. Use the wasd or arrow keys to move the vehicle. After you download th zip file extract it and then double click Driver.exe to play the game.</p>
+      <p class="file-description">This is a simple driving simulator to showcase my ability to code player/camera controls. Use the WASD or arrow keys to move the vehicle. After you download the zip file extract it and then double click Driver.exe to play the game.</p>
     </div>
     <a href="games/Driver.exe" download class="download-link">Download</a>
   </li>
@@ -90,11 +112,10 @@
   <li class="file-item">
     <div class="file-info">
       <p class="file-name">Food stampede</p>
-      <p class="file-description">This is a simple game where I demonstrate player/camera controlls as well as object collision. Use the a,d or arrow keys to move and the space bar to shoot projectiles. After you download the zip file extract it and then double click FoodStampede.exe to play the game.</p>
+      <p class="file-description">This is a simple game where I demonstrate player/camera controls as well as object collision. Use the A, D or arrow keys to move and the space bar to shoot projectiles. After you download the zip file extract it and then double click FoodStampede.exe to play the game.</p>
     </div>
     <a href="games/FoodStampede.exe" download class="download-link">Download</a>
   </li>
-
 </ul>
 
 </body>
